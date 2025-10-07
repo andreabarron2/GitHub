@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Little Nails - Login</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f8cdda, #f1a7f1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #c71585;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #c71585;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #ff69b4;
+            outline: none;
+        }
+
+        button {
+            background-color: #c71585;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff69b4;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+    <h1>Bienvenida a Little Nails Luxury</h1>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR69FEUQVV9uieAra1fX-76LfX8kVvhtxUOOA&s" 
+         alt="Logo Little Nails Luxury" 
+         style="display:block; margin: 10px auto; width: 120px; height: 120px; border-radius: 50%; object-fit: cover;">
+
+    <form id="loginForm" action="LoginServlet" method="post">
+    <label for="correo">Correo:</label>
+    <input type="text" id="correo" name="correo" required>
+
+    <label for="contrasena">Contraseña:</label>
+    <input type="password" id="contrasena" name="contrasena" required>
+
+    <button type="button" onclick="validarCorreo()">Iniciar sesión</button>
+</form>
+
+<script>
+  function validarCorreo() {
+    const correo = document.getElementById("correo").value.trim();
+
+    if (!correo.includes("@")) {
+      alert("❌ El correo debe contener el símbolo '@'.");
+      return;
+    }
+
+    // Si es válido, redirige al formulario
+    window.location.href = 'frontend/Formulario.html';
+  }
+</script>
+
+</div>
+</body>
+</html>

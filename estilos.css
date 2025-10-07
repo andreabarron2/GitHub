@@ -1,0 +1,234 @@
+body {
+    background: #f1bfe8;
+    color: #fff;
+}
+
+.lugar {
+    background: #e7abab;
+    border-radius: 12px;
+    margin: 30px auto;
+    padding: 0;
+    max-width: 98vw;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+.titulo_lugar {
+    display: block;
+    background: #d60000;
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: left;
+    width: 100%;
+    padding: 7px 12px;
+    border-radius: 6px 6px 0 0;
+    margin-bottom: 0;
+}
+
+.contenido_lugar {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 30px;
+    padding: 20px;
+}
+
+.img_indice {
+    width: 600px;
+    height: 400px;
+    max-width: 100%;
+    border-radius: 10px;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    background: #fff;
+    transform: translateY(0);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.img_indice:hover {
+    transform: translateY(-7px);
+    opacity: 0.7;
+}
+
+.img_indice:active {
+    transform: translateY(-7px);
+    opacity: 0.7;
+}
+
+.img_menu {
+    width: 700px;
+    height: 400px;
+    max-width: 100%;
+    border-radius: 10px;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    background: #fff;
+    transform: rotate(0deg) translateY(0);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.img_menu:hover {
+    transform: rotate(-10deg);
+    opacity: 0.7;
+}
+
+.img_menu:active {
+    transform: rotate(-10deg) translateY(-7px);
+    opacity: 0.7;
+}
+
+
+.contenido_lugar p {
+    color: #000000;
+    font-size: xx-large;
+    margin: 0;
+    padding: 10px 0 0 0;
+    width: 100%;
+    align-self: flex-start;
+    font-family: fangsong;
+    text-align: justify;
+}
+
+#bandera {
+    width: 100px;
+    height: 100px;
+    opacity: 50%;
+    background-image: none;
+    margin-right: 20px; 
+}
+
+#titulo {
+    font-family: 'Arial Black', sans-serif;
+    font-size: 4em;
+    color: #fff;
+    text-shadow: 2px 2px 8px #000;
+    align-self: center;
+    margin-left: 0; 
+}
+
+#subtitulo {
+    text-align: center;
+    font-size: 2em;
+    margin-top: 10px;
+    background: linear-gradient(to right, #8d8d8d, #ccc, #414040);
+    color: red;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.slogan {
+    color: red;
+}
+
+#contenedor1 {
+    margin: 20px;
+    padding: 20px;
+    background: linear-gradient(to bottom, #dd1719, #6d0101, #2e0101);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+#franja {
+  width: 100%;
+  height: 50px; 
+  background: linear-gradient(to bottom, white, gray);
+  border-radius: 15px; 
+
+}
+
+#contenedor2 {
+    margin: 20px;
+    padding: 50px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    justify-content: left;
+}
+
+.img_menu:active {
+    opacity: 0.7;
+    transform: translateY(-7px);
+}
+
+#pie {
+    margin: 20px;
+    padding: 15px 0;
+    background: linear-gradient(to right, #ff0000);
+    border-radius: 10px;
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    width: 98vw;
+    
+}
+
+#titulo_bosque {
+    background-color: red;
+    color: white;
+    text-align: center;
+    font-size: 2em;
+    padding: 20px;
+}
+
+.m_secundario.sel_menus {
+    background: linear-gradient(to bottom, red, black);
+    padding: 15px;
+}
+
+.m_secundario ul {
+    list-style-type:disc;
+    padding: 0;
+}
+
+.m_secundario li {
+    margin: 8px 0;
+}
+
+.m_secundario a {
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.m_secundario a:hover {
+    text-decoration: underline;
+}
+
+.titulo_lugar {
+    background-color: rgb(126, 17, 77);
+    color: white;
+    display: block;
+    padding: 5px;
+    font-size: 1.5em;
+    margin-top: 15px;
+    ;
+}
+
+a:-webkit-any-link {
+    color: #fff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.home_icon {
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+} 
+
+h1 {
+    display: block;
+    font-size: xxx-large;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;
+    color:#ac0976;
+}
+

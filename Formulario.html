@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Datos del cliente</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffbaf2;
+    }
+    .formulario {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 24px;
+      background: #ff90f0;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+    .formulario label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    .formulario input,
+    .formulario select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+    }
+    .formulario button {
+      background: #e91e63;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .formulario button:hover {
+      background: #c2185b;
+    }
+  </style>
+</head>
+<body>
+  <form class="formulario" id="pedidoForm">
+    <h2>Realiza tu pedido</h2>
+
+    <label for="nombre">Nombre(s)</label>
+    <input type="text" id="nombre" name="nombre" required />
+
+    <label for="apellidoPaterno">Apellido paterno</label>
+    <input type="text" id="apellidoPaterno" name="apellidoPaterno" required />
+
+    <label for="apellidoMaterno">Apellido materno</label>
+    <input type="text" id="apellidoMaterno" name="apellidoMaterno" required />
+
+    <label for="email">Correo electrónico</label>
+    <input type="email" id="email" name="email" required />
+
+    <label for="telefono">Número de celular (10 dígitos)</label>
+    <input type="tel" id="telefono" name="telefono" maxlength="12" required />
+
+    <label for="estado">Estado</label>
+    <select id="estado" name="estado" required>
+      <option value="">Selecciona tu estado</option>
+      <option value="CDMX">Ciudad de México</option>
+      <option value="EdoMex">Estado de México</option>
+      <option value="Jalisco">Jalisco</option>
+      <option value="NuevoLeon">Nuevo León</option>
+      <option value="Puebla">Puebla</option>
+      <option value="Veracruz">Veracruz</option>
+    </select>
+
+    <label for="codigoPostal">Código Postal (5 dígitos)</label>
+    <input type="text" id="codigoPostal" name="codigoPostal" maxlength="5" required />
+
+    <button type="submit">Guardar información</button>
+  </form>
+
+  <script>
+    // Máscara para teléfono: 000-000-0000
+    document.getElementById("telefono").addEventListener("input", function (e) {
+      let valor = e.target.value.replace(/\D/g, "").slice(0, 10);
+      let formateado = valor.replace(/(\d{3})(\d{3})(\d{0,4})/, function (_, a, b, c) {
+        return c ? `${a}-${b}-${c}` : b ? `${a}-${b}` : a;
+      });
+      e.target.value = formateado;
+    });
+
+    // Máscara para código postal: solo 5 dígitos
+    document.getElementById("codigoPostal").addEventListener("input", function (e) {
+      e.target.value = e.target.value.replace(/\D/g, "").slice(0, 5);
+    });
+
+    // Validación completa
+    document.getElementById("pedidoForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const nombre = document.getElementById("nombre").value.trim();
+      const apellidoPaterno = document.getElementById("apellidoPaterno").value.trim();
+      const apellidoMaterno = document.getElementById("apellidoMaterno").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const telefono = document.getElementById("telefono").value.trim();
+      const estado = document.getElementById("estado").value;
+      const codigoPostal = document.getElementById("codigoPostal").value.trim();
+
+      let errores = [];
+
+      if (!nombre || !apellidoPaterno || !apellidoMaterno || !email || !telefono || !estado || !codigoPostal) {
+        errores.push("Todos los campos son obligatorios.");
+      }
+
+      if (/\d/.test(nombre)) {
+        errores.push("El nombre no debe contener números.");
+      }
+
+      if (!email.includes("@")) {
+        errores.push("El correo debe contener el símbolo '@'.");
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        errores.push("El formato del correo no es válido.");
+      }
+
+      const telefonoSinGuiones = telefono.replace(/-/g, "");
+      if (!/^\d{10}$/.test(telefonoSinGuiones)) {
+        errores.push("El número de celular debe contener exactamente 10 dígitos numéricos.");
+      }
+
+      if (!/^\d{5}$/.test(codigoPostal)) {
+        errores.push("El código postal debe contener exactamente 5 dígitos numéricos.");
+      }
+
+      if (errores.length > 0) {
+        alert("❌ Corrige los siguientes errores:\n• " + errores.join("\n• "));
+      } else {
+        console.log("✅ Información válida. Redirigiendo...");
+        window.location.href = 'disenos.html';
+      }
+    });
+  </script>
+</body>
+</html>
+
+
