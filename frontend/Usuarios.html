@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Little Nails - Admin</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #eb9ac0, #f3aacb);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #000;
+        }
+
+        .login-container {
+            background-color: #fbd5e5;
+            padding: 45px 55px;
+            border-radius: 22px;
+            box-shadow: 0 12px 28px rgba(243, 170, 203, 0.35);
+            width: 460px;
+            max-width: calc(100% - 40px);
+            text-align: center;
+        }
+
+        h1 {
+            color: #c97aa7;
+            margin-bottom: 12px;
+            font-size: 32px;
+        }
+
+        p.subtitle {
+            margin-top: 0;
+            margin-bottom: 24px;
+            color: #7d4668;
+            font-weight: 500;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 18px;
+            border: 2px solid #f3aacb;
+            border-radius: 10px;
+            background-color: #fdeaf2;
+            transition: border 0.3s ease;
+            color: #000;
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #eb9ac0;
+            outline: none;
+        }
+
+        button[type="submit"] {
+            background-color: #f3aacb;
+            color: black;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #eb5d9d;
+            color: #fff;
+        }
+
+        .status-msg {
+            margin-top: 16px;
+            font-weight: bold;
+            min-height: 20px;
+        }
+
+        .extra-links {
+            margin-top: 26px;
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .extra-links a {
+            color: #c97aa7;
+            text-decoration: underline;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .login-avatar {
+            display: block;
+            margin: 0 auto 22px auto;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Panel administrativo</h1>
+        <p class="subtitle">Gestiona pedidos, usuarios y comentarios</p>
+        <img src="img/login-hero.jpg"
+             alt="Diseño de uñas acrílicas"
+             class="login-avatar">
+
+        <form id="loginForm" novalidate>
+            <label for="correo">Correo</label>
+            <input type="text" id="correo" name="correo" placeholder="admin@tusitio.com" required>
+
+            <label for="contrasena">Contraseña</label>
+            <input type="password" id="contrasena" name="contrasena" required>
+
+            <button type="submit">Ingresar</button>
+        </form>
+
+        <p id="statusMsg" class="status-msg"></p>
+
+        <div class="extra-links">
+            <a href="index.html">Volver al sitio</a>
+        </div>
+
+        <script src="js/config.js"></script>
+        <script>
+            const form = document.getElementById('loginForm');
+            const statusMsg = document.getElementById('statusMsg');
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const correo = document.getElementById('correo').value.trim();
+                const contrasena = document.getElementById('contrasena').value.trim();
+
+                if (!correo || !contrasena) {
+                    statusMsg.textContent = 'Introduce tu correo y contraseña.';
+                    statusMsg.style.color = '#b22222';
+                    return;
+                }
+
+                statusMsg.textContent = 'Verificando credenciales...';
+                statusMsg.style.color = '#000';
+
+                try {
+                    const res = await fetch(`${window.API_BASE}/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
+                        body: JSON.stringify({ email: correo, password: contrasena })
+                    });
+                    const data = await res.json().catch(() => ({}));
+                    if (res.ok) {
+                        if (data.role !== 'admin') {
+                            statusMsg.textContent = 'Este correo no tiene permisos de administrador.';
+                            statusMsg.style.color = '#b22222';
+                            return;
+                        }
+                        statusMsg.textContent = 'Acceso permitido, redirigiendo...';
+                        statusMsg.style.color = '#008000';
+                        setTimeout(() => {
+                            window.location.href = 'DatosUsuarios.html';
+                        }, 650);
+                    } else {
+                        statusMsg.textContent = data.error || 'Credenciales incorrectas.';
+                        statusMsg.style.color = '#b22222';
+                    }
+                } catch (e) {
+                    console.error('Error iniciando sesión admin', e);
+                    statusMsg.textContent = 'No se pudo conectar con el servidor.';
+                    statusMsg.style.color = '#b22222';
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>

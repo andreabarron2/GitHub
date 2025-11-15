@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Uñas Personalizadas</title>
+    <style>
+        body {
+            background-color: #f7bfd8;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 30px;
+            color: #000;
+        }
+
+        h1 {
+            color: black;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .galeria {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .diseno {
+            background: white;
+            border: 2px solid #f3aacb;
+            border-radius: 12px;
+            padding: 18px;
+            width: 220px;
+            box-shadow: 0 2px 8px rgba(243, 170, 203, 0.2);
+            text-align: center;
+        }
+
+        .diseno img {
+            width: 180px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .nombre {
+            font-weight: bold;
+            color: #c97aa7;
+            margin-bottom: 8px;
+        }
+
+        .descripcion {
+            font-size: 15px;
+            color: #333;
+        }
+
+        h2 {
+            font-weight: bold;
+            color: black;
+        }
+
+        .personalizado-section {
+            background: #fdeaf2;
+            border: 12px solid transparent;
+            border-image: url('https://img.freepik.com/fotos-premium/elemento-diseno-marco-corazon-rosado-brillante_53876-1026960.jpg?semt=ais_hybrid&w=740&q=80') 30 round; /* imagen de corazones rosa fuerte */
+            margin-bottom: 40px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(243, 170, 203, 0.2);
+        }
+
+        .personalizado-preview {
+            margin-top: 16px;
+        }
+
+        .personalizado-preview img {
+            max-width: 220px;
+            max-height: 140px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .personalizado-precio {
+            font-size: 1.2em;
+            color: #eb9ac0;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Uñas Personalizadas 💅</h1>
+
+    <div class="personalizado-section">
+        <h2>¡Sube tu propio diseño!</h2>
+        <form id="personalizadoForm">
+            <input type="file" id="disenoInput" accept="image/*"><br><br>
+            <button type="button" onclick="mostrarPersonalizado()">Precio por Diseño</button>
+        </form>
+        <div class="personalizado-preview" id="personalizadoPreview"></div>
+        <div class="personalizado-precio" id="personalizadoPrecio"></div>
+    </div>
+
+    <div class="galeria">
+        <div class="diseno">
+            <img src="https://i.pinimg.com/474x/30/b4/cb/30b4cba05824f367e0f47ab947798fad.jpg" alt="Diseño 1">
+            <div class="nombre">Rhinestone Glam</div>
+            <div class="descripcion">Acrílicas con pedrería y acabado brillante.</div>
+        </div>
+        <div class="diseno">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiv-ktOpjAVZ2Z3MaCvtphrTbRuy2ENAcNhw&s" alt="Diseño 2">
+            <div class="nombre">Pastel Art</div>
+            <div class="descripcion">Diseño artístico en tonos pastel y detalles pintados a mano.</div>
+        </div>
+        <div class="diseno">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTTmupeVsdzhfmrGtPDP0-KIEvmwgdHvmmBA&s" alt="Diseño 3">
+            <div class="nombre">Floral Chic</div>
+            <div class="descripcion">Flores delicadas sobre base nude y detalles dorados.</div>
+        </div>
+        <div class="diseno">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRPwJ1xA6EI9LuAc1Rr8iuGR_YvvSO72QZ-O2WCjLW3uMXIBIb8kKIrW5bHsrewARx7Wc&usqp=CAU" alt="Diseño 4">
+            <div class="nombre">Abstracto Moderno</div>
+            <div class="descripcion">Formas geométricas y colores vibrantes para un look moderno.</div>
+        </div>
+        <div class="diseno">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTi4zRJ00InQOiWCOl1VLDw5IB6zBRQfjRfiQ&s" alt="Diseño 5">
+            <div class="nombre">Minimalista Elegante</div>
+            <div class="descripcion">Líneas simples y colores neutros para un estilo sofisticado.</div>
+        </div>
+        <div class="diseno">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ79ZurEPTBeg_kNk8k29giB0NFtzZZ2M5vtw&s" alt="Diseño 6">
+            <div class="nombre">Galaxy Nails</div>
+            <div class="descripcion">Efecto galaxia con destellos y degradados en azul y morado.</div>
+        </div>
+        <div class="diseno">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb-6-cBSR1EQKTyy6fAOpYZcNsEE_V93714w&s" alt="Diseño 7">
+            <div class="nombre">Neón Pop</div>
+            <div class="descripcion">Colores neón y patrones llamativos para destacar.</div>
+        </div>
+        <div class="diseno">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScCCXBeGr6trW-eHTCwnmc8L5D_avg5Oix4Q&s" alt="Diseño 8">
+            <div class="nombre">French Twist</div>
+            <div class="descripcion">Clásicas francesas con un toque moderno y colores pastel.</div>
+        </div>
+    </div>
+
+    <script>
+        function mostrarPersonalizado() {
+            const input = document.getElementById('disenoInput');
+            const preview = document.getElementById('personalizadoPreview');
+            const precioDiv = document.getElementById('personalizadoPrecio');
+            preview.innerHTML = '';
+            precioDiv.innerHTML = '';
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Tu diseño">`;
+                    const precio = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
+                    precioDiv.innerHTML = `Precio estimado: $${precio} MXN`;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>
+

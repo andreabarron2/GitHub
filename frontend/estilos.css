@@ -1,0 +1,204 @@
+body {
+    background: linear-gradient(135deg, #eb9ac0, #f3aacb);
+    color: #000;
+}
+
+.lugar {
+    background: #fdeaf2;
+    border-radius: 12px;
+    margin: 30px auto;
+    padding: 0;
+    max-width: 98vw;
+    box-shadow: 0 2px 12px rgba(243, 170, 203, 0.3);
+}
+
+.titulo_lugar {
+    background-color: #c97aa7;
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: left;
+    width: 100%;
+    padding: 7px 12px;
+    border-radius: 6px 6px 0 0;
+    margin-bottom: 0;
+}
+
+.contenido_lugar {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 30px;
+    padding: 20px;
+}
+
+.img_indice,
+.img_menu {
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    background: #fff;
+    border-radius: 10px;
+    max-width: 100%;
+}
+
+.img_indice {
+    width: 600px;
+    height: 400px;
+    transform: translateY(0);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.img_indice:hover,
+.img_indice:active {
+    transform: translateY(-7px);
+    opacity: 0.7;
+}
+
+.img_menu {
+    width: 700px;
+    height: 400px;
+    transform: rotate(0deg) translateY(0);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.img_menu:hover {
+    transform: rotate(-10deg);
+    opacity: 0.7;
+}
+
+.img_menu:active {
+    transform: rotate(-10deg) translateY(-7px);
+    opacity: 0.7;
+}
+
+.contenido_lugar p {
+    color: #000;
+    font-size: xx-large;
+    margin: 0;
+    padding: 10px 0 0 0;
+    width: 100%;
+    align-self: flex-start;
+    font-family: fangsong;
+    text-align: justify;
+}
+
+#bandera {
+    width: 100px;
+    height: 100px;
+    opacity: 50%;
+    background-image: none;
+    margin-right: 20px; 
+}
+
+#titulo {
+    font-family: 'Arial Black', sans-serif;
+    font-size: 4em;
+    color: #c97aa7;
+    text-shadow: 2px 2px 8px #f7bfd8;
+    align-self: center;
+    margin-left: 0; 
+}
+
+#subtitulo {
+    text-align: center;
+    font-size: 2em;
+    margin-top: 10px;
+    background: linear-gradient(to right, #f3aacb, #fbd5e5, #fdeaf2);
+    color: #c97aa7;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.slogan {
+    color: #eb9ac0;
+}
+
+#contenedor1 {
+    margin: 20px;
+    padding: 20px;
+    background: linear-gradient(to bottom, #f3aacb, #eb9ac0, #c97aa7);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+#franja {
+    width: 100%;
+    height: 50px; 
+    background: linear-gradient(to bottom, #fbd5e5, #f3aacb);
+    border-radius: 15px; 
+}
+
+#contenedor2 {
+    margin: 20px;
+    padding: 50px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    justify-content: left;
+}
+
+#pie {
+    margin: 20px;
+    padding: 15px 0;
+    background: linear-gradient(to right, #f3aacb, #c97aa7);
+    border-radius: 10px;
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    width: 98vw;
+}
+
+#titulo_bosque {
+    background-color: #c97aa7;
+    color: white;
+    text-align: center;
+    font-size: 2em;
+    padding: 20px;
+}
+
+.m_secundario.sel_menus {
+    background: linear-gradient(to bottom, #f3aacb, #c97aa7);
+    padding: 15px;
+}
+
+.m_secundario ul {
+    list-style-type: disc;
+    padding: 0;
+}
+
+.m_secundario li {
+    margin: 8px 0;
+}
+
+.m_secundario a {
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.m_secundario a:hover {
+    text-decoration: underline;
+}
+
+a:-webkit-any-link {
+    color: #c97aa7;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.home_icon {
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+} 
+
+h1 {
+    font-size: xxx-large;
+    font-weight: bold;
+    color: #c97aa7;
+}
+

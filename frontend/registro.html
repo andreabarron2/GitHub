@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Little Nails - Registro</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #eb9ac0, #f3aacb);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #000;
+    }
+
+    .register-container {
+      background-color: #fbd5e5;
+      padding: 45px 55px;
+      border-radius: 20px;
+      box-shadow: 0 15px 32px rgba(243, 170, 203, 0.35);
+      text-align: center;
+      width: 460px;
+    }
+
+    h1 {
+      color: #c97aa7;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #000;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 18px;
+      border: 2px solid #f3aacb;
+      border-radius: 8px;
+      background-color: #fdeaf2;
+      transition: 0.3s;
+      color: #000;
+      font-size: 14px;
+    }
+
+    input:focus {
+      border-color: #eb9ac0;
+      outline: none;
+    }
+
+    button {
+      background-color: #f3aacb;
+      color: black;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background-color 0.3s ease;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #eb9ac0;
+    }
+
+    .status-msg {
+      margin-top: 12px;
+      font-weight: bold;
+    }
+
+    .extra-links {
+      margin-top: 18px;
+    }
+
+    .extra-links a {
+      color: #c97aa7;
+      text-decoration: underline;
+      font-weight: bold;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h1>Crea tu cuenta</h1>
+    <form id="registerForm" novalidate>
+      <label for="nombre">Nombre(s)</label>
+      <input type="text" id="nombre" name="nombre" placeholder="(Opcional)">
+
+      <label for="apellidoPaterno">Apellido paterno</label>
+      <input type="text" id="apellidoPaterno" name="apellidoPaterno" required>
+
+      <label for="apellidoMaterno">Apellido materno</label>
+      <input type="text" id="apellidoMaterno" name="apellidoMaterno" required>
+
+      <label for="correo">Correo</label>
+      <input type="email" id="correo" name="correo" required>
+
+      <label for="telefono">Número de celular (10 dígitos)</label>
+      <input type="tel" id="telefono" name="telefono" maxlength="10" required>
+
+      <label for="ciudad">Ciudad</label>
+      <select id="ciudad" name="ciudad" required>
+        <option value="">Selecciona tu ciudad</option>
+        <option value="Mexicali">Mexicali</option>
+        <option value="Tijuana">Tijuana</option>
+        <option value="Ensenada">Ensenada</option>
+        <option value="Tecate">Tecate</option>
+        <option value="Rosarito">Rosarito</option>
+        <option value="SanFelipe">San Felipe</option>
+      </select>
+
+      <label for="codigoPostal">Código Postal (5 dígitos)</label>
+      <input type="text" id="codigoPostal" name="codigoPostal" maxlength="5" required>
+
+      <label for="contrasena">Contraseña</label>
+      <input type="password" id="contrasena" name="contrasena" minlength="6" required>
+
+      <label for="confirmacion">Confirmar contraseña</label>
+      <input type="password" id="confirmacion" name="confirmacion" required>
+
+      <button type="submit">Registrarme</button>
+    </form>
+
+    <p id="registerStatus" class="status-msg"></p>
+
+    <div class="extra-links">
+      <a href="index.html">¿Ya tienes cuenta? Inicia sesión</a>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script>
+    const registerForm = document.getElementById('registerForm');
+    const statusMsg = document.getElementById('registerStatus');
+
+    registerForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const name = document.getElementById('nombre').value.trim();
+      const apellidoPaterno = document.getElementById('apellidoPaterno').value.trim();
+      const apellidoMaterno = document.getElementById('apellidoMaterno').value.trim();
+      const email = document.getElementById('correo').value.trim();
+      const telefono = document.getElementById('telefono').value.trim();
+      const ciudad = document.getElementById('ciudad').value.trim();
+      const codigoPostal = document.getElementById('codigoPostal').value.trim();
+      const password = document.getElementById('contrasena').value;
+      const confirm = document.getElementById('confirmacion').value;
+
+      if (!apellidoPaterno) {
+        statusMsg.textContent = 'El apellido paterno es obligatorio.';
+        statusMsg.style.color = '#b22222';
+        return;
+      }
+
+      if (!apellidoMaterno) {
+        statusMsg.textContent = 'El apellido materno es obligatorio.';
+        statusMsg.style.color = '#b22222';
+        return;
+      }
+
+      if (!email || !password) {
+        statusMsg.textContent = 'Correo y contraseña son obligatorios.';
+        statusMsg.style.color = '#b22222';
+        return;
+      }
+
+      if (password.length < 6) {
+        statusMsg.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+        statusMsg.style.color = '#b22222';
+        return;
+      }
+
+      if (password !== confirm) {
+        statusMsg.textContent = 'Las contraseñas no coinciden.';
+        statusMsg.style.color = '#b22222';
+        return;
+      }
+
+      if (!/^[0-9]{10}$/.test(telefono)) {
+        statusMsg.textContent = 'El teléfono debe tener 10 dígitos.';
+        statusMsg.style.color = '#b22222';
+        return;
+      }
+
+      if (!ciudad) {
+        statusMsg.textContent = 'Selecciona una ciudad.';
+        statusMsg.style.color = '#b22222';
+        return;
+      }
+
+      if (!/^[0-9]{5}$/.test(codigoPostal)) {
+        statusMsg.textContent = 'El código postal debe tener 5 dígitos.';
+        statusMsg.style.color = '#b22222';
+        return;
+      }
+
+      statusMsg.textContent = 'Creando cuenta...';
+      statusMsg.style.color = '#000';
+
+      try {
+        const res = await fetch(`${window.API_BASE}/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            password,
+            name: name || null,
+            apellidoPaterno,
+            apellidoMaterno,
+            telefono,
+            ciudad,
+            codigoPostal
+          })
+        });
+
+        if (res.ok) {
+          statusMsg.textContent = 'Cuenta creada. Redirigiendo al login...';
+          statusMsg.style.color = '#008000';
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1000);
+        } else {
+          const data = await res.json().catch(() => ({}));
+          statusMsg.textContent = data.error || 'No se pudo registrar.';
+          statusMsg.style.color = '#b22222';
+        }
+      } catch (err) {
+        console.error('Error registrando usuario', err);
+        statusMsg.textContent = 'No se pudo conectar con el servidor.';
+        statusMsg.style.color = '#b22222';
+      }
+    });
+  </script>
+</body>
+</html>

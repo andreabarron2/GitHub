@@ -1,0 +1,338 @@
+disenos.html <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Diseños de Uñas</title>
+    <link rel="stylesheet" href="estilos.css">
+    <style>
+        body {
+            background-color: #ee97b4;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 30px;
+        }
+
+        .diseno {
+            background-color: #ffe4e1;
+            border: 2px solid #c71585;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        img {
+            max-width: 200px;
+            border-radius: 10px;
+        }
+
+        .botones {
+            margin-bottom: 30px;
+        }
+
+        .boton {
+            background-color: #c71585;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            margin-right: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .boton:hover {
+            background-color: #a0527d;
+        }
+
+        .banner-contenedor {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-image: url('https://m.media-amazon.com/images/I/61CBeAsS9yL._UF1000,1000_QL80_.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .banner-contenedor::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+
+        .banner-texto {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            font-size: 64px;
+            font-weight: bold;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            z-index: 2;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #c71585;
+        }
+
+        form input, form textarea {
+            width: 100%;
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid #c71585;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        form textarea {
+            resize: vertical;
+        }
+
+        .comentario-status {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .session-info {
+            font-weight: 600;
+            color: #4a2152;
+        }
+
+        .logout-button {
+            background-color: #fdeaf2;
+            color: #c71585;
+            border: 1px solid #c71585;
+            border-radius: 8px;
+            padding: 8px 14px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .logout-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <span id="sessionInfo" class="session-info">Sesión: verificando...</span>
+        <button type="button" id="logoutButton" class="logout-button" hidden>Cerrar sesión</button>
+    </div>
+    <div class="banner-contenedor">
+        <div class="banner-texto">Diseños disponibles</div>
+    </div>
+
+    <div id="contenedor2" class="indice">
+        <div class="lugar">
+            <span class="titulo_lugar">Uñas Personalizadas</span>
+            <div class="contenido_lugar">
+                <a href="Uñas personalizadas.html" aria-label="Ver diseños de uñas personalizadas">
+                    <img src="https://image.made-in-china.com/155f0j00IzibshBSEAuG/Luxury-Private-Label-Press-on-Nails-Handmade-Custom-Thick-Acrylic-Nails-with-Rhinestones-Artificial-Fingernails.webp" class="img_indice" alt="Muestra de uñas personalizadas con piedras brillantes">
+                </a>
+                <p>Cada set de uñas es una expresión de tu estilo. Usamos piedras brillantes, colores intensos y acabados de lujo para que tus manos hablen con elegancia y actitud. Trabajamos con materiales de alta calidad y cuidamos cada detalle para lograr un acabado impecable que se ve y se siente increíble.</p>
+            </div>
+        </div>
+
+        <div class="lugar">
+            <span class="titulo_lugar">Diseños estándar</span>
+            <div class="contenido_lugar">
+                <a href="Diseños estándar.html" aria-label="Ver diseños estándar disponibles">
+                    <img src="https://media.glamour.mx/photos/67e5848e16cec36a6f02ad0a/master/w_1600,c_limit/un%CC%83as-al-natural-nude-mate.jpg" class="img_indice" alt="Diseño de uñas neutras estilo natural">
+                </a>
+                <p>Elegancia sutil, estilo diario. Nuestros diseños estándar ofrecen acabados limpios, tonos neutros y detalles delicados que se adaptan a cualquier ocasión. Perfectos para quienes buscan belleza sin excesos, con la calidad y el cuidado que nos distingue.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="diseno">
+        <h2>Envíanos un comentario para mejorar tu experiencia</h2>
+        <form action="https://formsubmit.co/andrea.rodriguez43@uabc.edu.mx" method="POST" id="formulario">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="email">Correo electrónico:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="mensaje">Mensaje:</label>
+            <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+
+            <input type="hidden" name="_next" value="http://127.0.0.1:8080/Little-Nails-Luxury/codigo/frontend/" />
+            <!-- Copias a los otros correos solicitados -->
+            <input type="hidden" name="_cc" value="jazmin.morfin@uabc.edu.mx,vallejo.jose@uabc.edu.mx" />
+            <!-- Opcional: asunto personalizado para identificar comentarios -->
+            <input type="hidden" name="_subject" value="Nuevo comentario - Little Nails Luxury" />
+
+            <button type="submit" class="boton" id="comentarioSubmit">Enviar mensaje</button>
+        </form>
+        <p id="comentarioStatus" class="comentario-status"></p>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script>
+    const COMMENT_FORM_ENDPOINT = 'https://formsubmit.co/ajax/andrea.rodriguez43@uabc.edu.mx';
+    const COMMENT_FORM_CC = ['jazmin.morfin@uabc.edu.mx', 'vallejo.jose@uabc.edu.mx'];
+
+    const comentarioForm = document.getElementById('formulario');
+    const comentarioStatus = document.getElementById('comentarioStatus');
+    const comentarioSubmit = document.getElementById('comentarioSubmit');
+    const sessionInfo = document.getElementById('sessionInfo');
+    const logoutButton = document.getElementById('logoutButton');
+
+    function setComentarioStatus(message, isError = false) {
+        if (!comentarioStatus) return;
+        comentarioStatus.textContent = message || '';
+        comentarioStatus.style.color = isError ? '#d9534f' : '#2e8b57';
+    }
+
+    async function refreshSessionInfo() {
+        if (!sessionInfo) return;
+        try {
+            const res = await fetch(`${window.API_BASE}/me`, { credentials: 'include' });
+            if (!res.ok) {
+                sessionInfo.textContent = 'Sesión: invitado';
+                logoutButton?.setAttribute('hidden', '');
+                return;
+            }
+            const data = await res.json().catch(() => ({}));
+            if (data?.user) {
+                const name = data.user.nombre || data.user.email || 'Usuario';
+                sessionInfo.textContent = `Sesión: ${name}`;
+                logoutButton?.removeAttribute('hidden');
+                logoutButton.disabled = false;
+            } else {
+                sessionInfo.textContent = 'Sesión: invitado';
+                logoutButton?.setAttribute('hidden', '');
+            }
+        } catch (error) {
+            console.error('No se pudo obtener la sesión', error);
+            sessionInfo.textContent = 'Sesión: invitado';
+            logoutButton?.setAttribute('hidden', '');
+        }
+    }
+
+    async function cerrarSesion() {
+        if (!logoutButton) return;
+        logoutButton.disabled = true;
+        logoutButton.textContent = 'Cerrando...';
+        try {
+            await fetch(`${window.API_BASE}/logout`, {
+                method: 'POST',
+                credentials: 'include'
+            });
+        } catch (error) {
+            console.error('Error al cerrar sesión', error);
+        } finally {
+            window.location.href = 'index.html';
+        }
+    }
+
+    logoutButton?.addEventListener('click', cerrarSesion);
+    refreshSessionInfo();
+
+    async function enviarComentarioBackend(payload) {
+        const apiBase = window.API_BASE || 'http://localhost:3000';
+        const res = await fetch(`${apiBase}/comentarios`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (!res.ok) {
+            const error = await res.json().catch(() => ({}));
+            throw new Error(error.error || 'No se pudo guardar el comentario');
+        }
+        return res.json().catch(() => ({}));
+    }
+
+    async function enviarComentarioEmail(payload) {
+        const body = {
+            nombre: payload.nombre,
+            correo_cliente: payload.email,
+            mensaje: payload.mensaje,
+            '_subject': `Nuevo comentario de ${payload.nombre || 'cliente'}`,
+            '_template': 'table',
+            '_captcha': 'false',
+            '_cc': [...COMMENT_FORM_CC, payload.email].join(',')
+        };
+
+        const res = await fetch(COMMENT_FORM_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!res.ok) {
+            const error = await res.json().catch(() => ({}));
+            throw new Error(error.message || 'FormSubmit rechazó el comentario');
+        }
+
+        return res.json().catch(() => ({}));
+    }
+
+    comentarioForm?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!comentarioForm) return;
+        const formData = new FormData(comentarioForm);
+        const payload = {
+            nombre: (formData.get('nombre') || '').toString().trim(),
+            email: (formData.get('email') || '').toString().trim(),
+            mensaje: (formData.get('mensaje') || '').toString().trim()
+        };
+
+        if (!payload.nombre || !payload.email || !payload.mensaje) {
+            setComentarioStatus('Completa todos los campos antes de enviar.', true);
+            return;
+        }
+
+        comentarioSubmit.disabled = true;
+        setComentarioStatus('Enviando comentario...', false);
+
+        try {
+            await enviarComentarioBackend(payload);
+        } catch (err) {
+            console.error('Error guardando comentario', err);
+            setComentarioStatus(err.message || 'No se pudo guardar el comentario.', true);
+            comentarioSubmit.disabled = false;
+            return;
+        }
+
+        try {
+            await enviarComentarioEmail(payload);
+            setComentarioStatus('¡Gracias! Recibimos tu comentario y enviamos la notificación.', false);
+            comentarioForm.reset();
+        } catch (err) {
+            console.error('Error notificando comentario', err);
+            setComentarioStatus('Guardamos tu comentario, pero no pudimos enviar el correo.', true);
+        } finally {
+            comentarioSubmit.disabled = false;
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diseños Estándar</title>
+    <style>
+body {
+    background-color: pink;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 30px;
+    color: #000;
+}
+h1 {
+    color: black;
+    text-align: center;
+    margin-bottom: 40px;
+}
+.galeria {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+.diseno {
+    background: white;
+    border: 2px solid #f3aacb;
+    border-radius: 12px;
+    padding: 18px;
+    width: 220px;
+    box-shadow: 0 2px 8px rgba(243, 170, 203, 0.2);
+    text-align: center;
+}
+.diseno img {
+    width: 180px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+.nombre {
+    font-weight: bold;
+    color: #c97aa7;
+    margin-bottom: 8px;
+}
+.descripcion {
+    font-size: 15px;
+    color: #333;
+}
+#total {
+    text-align: center;
+    font-size: 20px;
+    color: #c97aa7;
+}
+
+    </style>
+</head>
+<body>
+    <h1>Uñas Estándar 💅</h1>
+    <div class="galeria">
+        <div class="diseno">
+            <img src="https://storage.googleapis.com/belity_web_images/blog/manicura-francesa-moderna.jpg" alt="Francesa Clásica">
+            <div class="nombre">Francesa Clásica</div>
+            <div class="descripcion">Diseño tradicional con punta blanca y base nude, elegante y versátil.</div>
+            <div class="precio" data-precio="250">$250 MXN</div>
+            <button onclick="agregar(0)">Agregar al carrito</button>
+            <span id="contador-0">0</span>
+            <button onclick="quitar(0)">-</button>
+        </div>
+        <div class="diseno">
+            <img src="https://i0.wp.com/imgserzen.s3.amazonaws.com/u/fotografias/m/2024/10/7/f768x1-84985_85112_5050.jpg?w=780&ssl=1" alt="Rosa Sencillo">
+            <div class="nombre">Rosa Sencillo</div>
+            <div class="descripcion">Uñas en tono rosa pastel, perfectas para cualquier ocasión.</div>
+            <div class="precio" data-precio="200">$200 MXN</div>
+            <button onclick="agregar(1)">Agregar al carrito</button>
+            <span id="contador-1">0</span>
+            <button onclick="quitar(1)">-</button>
+        </div>
+        <div class="diseno">
+            <img src="https://i.etsystatic.com/13812041/r/il/917fb7/4416931459/il_570xN.4416931459_t0hw.jpg" alt="Rojo Clásico">
+            <div class="nombre">Rojo Clásico</div>
+            <div class="descripcion">Color rojo intenso, símbolo de elegancia y sofisticación.</div>
+            <div class="precio" data-precio="300">$300 MXN</div>
+            <button onclick="agregar(2)">Agregar al carrito</button>
+            <span id="contador-2">0</span>
+            <button onclick="quitar(2)">-</button>
+        </div>
+        <div class="diseno">
+            <img src="https://s1.ppllstatics.com/mujerhoy/www/multimedia/202311/02/media/cortadas/manicura-glitter-sencilla-2-multicolor-k5nF--624x624@MujerHoy.jpg" alt="Glitter Básico">
+            <div class="nombre">Glitter Básico</div>
+            <div class="descripcion">Uñas con acabado brillante y toque de glitter para resaltar tu estilo.</div>
+            <div class="precio" data-precio="350">$350 MXN</div>
+            <button onclick="agregar(3)">Agregar al carrito</button>
+            <span id="contador-3">0</span>
+            <button onclick="quitar(3)">-</button>
+        </div>
+        <div class="diseno">
+            <img src="https://media.glamour.mx/photos/685c47357ce82a95b06a9282/master/w_1600%2Cc_limit/un%25CC%2583as-nude-glaseadas.jpg" alt="Nude Elegante">
+            <div class="nombre">Nude Elegante</div>
+            <div class="descripcion">Tonos nude suaves para un look natural y sofisticado.</div>
+            <div class="precio" data-precio="400">$400 MXN</div>
+            <button onclick="agregar(4)">Agregar al carrito</button>
+            <span id="contador-4">0</span>
+            <button onclick="quitar(4)">-</button>
+        </div>
+        <div class="diseno">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm3pyFaXf0izgwAO5-Mj_9GQYgVpPBzS0hUV2x_P7_nLOI4uH2Ty3zaL15JpHZyKoSyTc&usqp=CAU" alt="Blanco Minimalista">
+            <div class="nombre">Blanco Minimalista</div>
+            <div class="descripcion">Uñas blancas con acabado limpio y moderno.</div>
+            <div class="precio" data-precio="220">$220 MXN</div>
+            <button onclick="agregar(5)">Agregar al carrito</button>
+            <span id="contador-5">0</span>
+            <button onclick="quitar(5)">-</button>
+        </div>
+        <div class="diseno">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJA75-zd7EqWAuYleWCxqVgA5IdKqVW5W6NQ&s" alt="Azul Pastel">
+            <div class="nombre">Azul Pastel</div>
+            <div class="descripcion">Color azul suave para un toque fresco y juvenil.</div>
+            <div class="precio" data-precio="280">$280 MXN</div>
+            <button onclick="agregar(6)">Agregar al carrito</button>
+            <span id="contador-6">0</span>
+            <button onclick="quitar(6)">-</button>
+        </div>
+        <div class="diseno">
+            <img src="https://i.pinimg.com/236x/4c/b2/52/4cb252e0a0f4c2caa5376a849799c18b.jpg" alt="Neutro Moderno">
+            <div class="nombre">Neutro Moderno</div>
+            <div class="descripcion">Diseño en tonos neutros, ideal para cualquier ocasión.</div>
+            <div class="precio" data-precio="320">$320 MXN</div>
+            <button onclick="agregar(7)">Agregar al carrito</button>
+            <span id="contador-7">0</span>
+            <button onclick="quitar(7)">-</button>
+        </div>
+    </div>
+    <br>
+<div class="acciones">
+    <button onclick="calcularTotal()">Calcular total</button>
+    <button onclick="generarPedido()">Generar pedido</button>
+</div>
+<div id="total"></div>
+
+<script>
+    const cantidades = Array(8).fill(0);
+
+    function agregar(idx) {
+        cantidades[idx]++;
+        document.getElementById('contador-' + idx).textContent = cantidades[idx];
+    }
+
+    function quitar(idx) {
+        if (cantidades[idx] > 0) {
+            cantidades[idx]--;
+            document.getElementById('contador-' + idx).textContent = cantidades[idx];
+        }
+    }
+
+    function calcularTotal() {
+        let total = 0;
+        document.querySelectorAll('.precio').forEach((el, idx) => {
+            const precio = parseInt(el.getAttribute('data-precio'));
+            total += precio * cantidades[idx];
+        });
+        document.getElementById('total').textContent = 'Total: $' + total + ' MXN';
+    }
+
+    function generarPedido() {
+        // Guarda el carrito en localStorage
+        localStorage.setItem("carrito", JSON.stringify(cantidades));
+        // Redirige al formulario
+        window.location.href = 'Formulario.html';
+    }
+</script>
+
+</body>
+</html>

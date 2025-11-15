@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Little Nails - Login</title>
+  <style>
+    body {
+      margin: 0;
+      padding: clamp(16px, 4vw, 40px);
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #eb9ac0, #f3aacb);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100dvh;
+      color: #000;
+    }
+
+    .login-container {
+      background-color: #fbd5e5;
+      padding: clamp(32px, 6vw, 48px);
+      border-radius: 20px;
+      box-shadow: 0 15px 32px rgba(243, 170, 203, 0.35);
+      text-align: center;
+      width: min(440px, 94vw);
+    }
+
+    h1 {
+      color: #c97aa7;
+      margin-bottom: clamp(20px, 5vw, 32px);
+      font-size: clamp(1.7rem, 4.5vw, 2.3rem);
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #000;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: clamp(10px, 2.2vw, 14px);
+      margin-bottom: clamp(16px, 4vw, 24px);
+      border: 2px solid #f3aacb;
+      border-radius: 8px;
+      background-color: #fdeaf2;
+      transition: 0.3s;
+      color: #000;
+      font-size: clamp(0.95rem, 2.4vw, 1.05rem);
+    }
+
+    input:focus {
+      border-color: #eb9ac0;
+      outline: none;
+    }
+
+    button {
+      background-color: #f3aacb;
+      color: black;
+      border: none;
+      padding: clamp(12px, 3vw, 18px);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: clamp(1rem, 2.6vw, 1.15rem);
+      transition: background-color 0.3s ease;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #eb9ac0;
+    }
+
+    .status-msg {
+      margin-top: 18px;
+      font-weight: bold;
+    }
+
+    .extra-links {
+      margin-top: 22px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .extra-links a {
+      flex: 1 1 45%;
+      color: #c97aa7;
+      text-decoration: underline;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .login-avatar {
+      display: block;
+      margin: 10px auto;
+      width: clamp(120px, 28vw, 160px);
+      height: clamp(120px, 28vw, 160px);
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    @media (min-width: 1024px) and (max-width: 1366px) {
+      .login-container {
+        transform: scale(0.9);
+        transform-origin: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Bienvenida a Little Nails Luxury</h1>
+    <img src="img/login-hero.jpg"
+      alt="Diseño de uñas acrílicas"
+      class="login-avatar">
+    
+    <form id="loginForm" novalidate>
+      <label for="correo">Correo:</label>
+      <input type="email" id="correo" name="correo" required>
+      <label for="contrasena">Contraseña:</label>
+      <input type="password" id="contrasena" name="contrasena" required>
+      <button type="submit">Iniciar sesión</button>
+    </form>
+    <p id="loginStatus" class="status-msg"></p>
+
+    <div class="extra-links">
+      <a href="registro.html">Regístrate</a>
+      <a href="Usuarios.html">Administrador</a>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script>
+      const form = document.getElementById('loginForm');
+      const statusMsg = document.getElementById('loginStatus');
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const email = document.getElementById('correo').value.trim();
+        const password = document.getElementById('contrasena').value.trim();
+        if (!email || !password) {
+          statusMsg.textContent = 'Completa correo y contraseña.';
+          statusMsg.style.color = '#b22222';
+          return;
+        }
+        statusMsg.textContent = 'Verificando...';
+        statusMsg.style.color = '#000';
+        try {
+          const res = await fetch(`${window.API_BASE}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ email, password })
+          });
+          if (res.ok) {
+            statusMsg.textContent = 'Sesión iniciada, redirigiendo...';
+            statusMsg.style.color = '#008000';
+            setTimeout(() => {
+              window.location.href = 'disenos.html';
+            }, 700);
+          } else {
+            const data = await res.json().catch(() => ({}));
+            statusMsg.textContent = data.error || 'Credenciales inválidas.';
+            statusMsg.style.color = '#b22222';
+          }
+        } catch (err) {
+          console.error('Error autenticando', err);
+          statusMsg.textContent = 'No se pudo conectar con el servidor.';
+          statusMsg.style.color = '#b22222';
+        }
+      });
+    </script>
+
+  </div>
+</body>
+</html>
+
+
+
+

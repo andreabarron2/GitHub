@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Formulario de Pedido</title>
+  <style>
+    body {
+      background-color: #fbd5e5;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 30px;
+      color: #000;
+    }
+
+    .formulario {
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 4px 12px rgba(243, 170, 203, 0.3);
+    }
+
+    h2 {
+      color: black;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: black;
+    }
+
+    input, select {
+      width: 100%;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #f3aacb;
+      background-color: #fdeaf2;
+      font-size: 15px;
+    }
+
+    button {
+      margin-top: 25px;
+      background-color: #eb5d9d;
+      color: black;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+      display: block;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #eb9ac0;
+    }
+
+    .resumen {
+      margin-top: 30px;
+      background-color: #ffe4f1;
+      border: 2px solid #f3aacb;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .resumen h3 {
+      margin-top: 0;
+      color: #c71585;
+    }
+
+    .item {
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+
+    .status-msg {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .top-actions {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .back-btn {
+      background-color: #fdeaf2;
+      color: #c71585;
+      border: 1px solid #f3aacb;
+      border-radius: 8px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.2s ease;
+    }
+
+    .back-btn:hover {
+      background-color: #fce1ee;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-actions">
+    <button type="button" class="back-btn" id="btnRegresar">← Atrás</button>
+  </div>
+  <form method="POST" class="formulario" id="pedidoForm">
+    <h2>Datos del Usuario</h2>
+
+    <label for="nombre">Nombre(s)</label>
+    <input type="text" id="nombre" name="nombre" required />
+
+    <label for="apellidoPaterno">Apellido paterno</label>
+    <input type="text" id="apellidoPaterno" name="apellidoPaterno" required />
+
+    <label for="apellidoMaterno">Apellido materno</label>
+    <input type="text" id="apellidoMaterno" name="apellidoMaterno" required />
+
+    <label for="email">Correo electrónico</label>
+    <input type="email" id="email" name="email" required />
+
+    <label for="telefono">Número de celular (10 dígitos)</label>
+    <input type="tel" id="telefono" name="telefono" maxlength="12" required />
+
+    <label for="estado">Estado</label>
+    <select id="estado" name="estado" required>
+      <option value="">Selecciona tu ciudad</option>
+      <option value="Mexicali">Mexicali</option>
+      <option value="Tijuana">Tijuana</option>
+      <option value="Ensenada">Ensenada</option>
+      <option value="Tecate">Tecate</option>
+      <option value="Rosarito">Rosarito</option>
+      <option value="SanFelipe">San Felipe</option>
+    </select>
+
+    <label for="codigoPostal">Código Postal (5 dígitos)</label>
+    <input type="text" id="codigoPostal" name="codigoPostal" maxlength="5" required />
+
+    <!-- Campo oculto para resumen del pedido -->
+    <input type="hidden" id="resumenOculto" name="resumenPedido" />
+
+    <button type="submit">Guardar información</button>
+
+    <div class="resumen" id="resumenPedido">
+      <h3>Resumen del pedido</h3>
+      <div id="listaPedido"></div>
+    </div>
+  <p id="statusMsg" class="status-msg"></p>
+  </form>
+
+  <script src="js/config.js"></script>
+  <script>
+    const FORM_SUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/andrea.rodriguez43@uabc.edu.mx';
+    const FORM_SUBMIT_CC = ['jazmin.morfin@uabc.edu.mx', 'vallejo.jose@uabc.edu.mx'];
+
+    const statusMsg = document.getElementById("statusMsg");
+    const formulario = document.getElementById("pedidoForm");
+    const nombreInput = document.getElementById("nombre");
+    const apellidoPInput = document.getElementById("apellidoPaterno");
+    const apellidoMInput = document.getElementById("apellidoMaterno");
+    const emailInput = document.getElementById("email");
+    const telefonoInput = document.getElementById("telefono");
+    const estadoSelect = document.getElementById("estado");
+    const cpInput = document.getElementById("codigoPostal");
+  const backBtn = document.getElementById("btnRegresar");
+
+    const diseños = [
+      "Francesa Clásica", "Rosa Sencillo", "Rojo Clásico", "Glitter Básico",
+      "Nude Elegante", "Blanco Minimalista", "Azul Pastel", "Neutro Moderno"
+    ];
+    const precios = [250, 200, 300, 350, 400, 220, 280, 320];
+    const cantidades = JSON.parse(localStorage.getItem("carrito")) || Array(8).fill(0);
+    const lista = document.getElementById("listaPedido");
+    const resumenOculto = document.getElementById("resumenOculto");
+
+    let total = 0;
+    let resumenTexto = "";
+
+    cantidades.forEach((cantidad, idx) => {
+      if (cantidad > 0) {
+        const item = document.createElement("div");
+        item.className = "item";
+        const texto = `${diseños[idx]} × ${cantidad} = $${cantidad * precios[idx]} MXN`;
+        item.textContent = texto;
+        lista.appendChild(item);
+        resumenTexto += texto + "\n";
+        total += cantidad * precios[idx];
+      }
+    });
+
+    if (total === 0) {
+      lista.innerHTML = "<p>No se ha seleccionado ningún diseño.</p>";
+      resumenTexto = "No se ha seleccionado ningún diseño.";
+    } else {
+      const totalItem = document.createElement("div");
+      totalItem.className = "item";
+      totalItem.style.fontWeight = "bold";
+      totalItem.textContent = `Total: $${total} MXN`;
+      lista.appendChild(totalItem);
+      resumenTexto += `Total: $${total} MXN`;
+    }
+
+    resumenOculto.value = resumenTexto;
+
+  let profileData = null;
+  let countdownTimer = null;
+  let secondsLeft = 5;
+
+    function setFormLock(locked) {
+      [nombreInput, apellidoPInput, apellidoMInput, emailInput, telefonoInput, cpInput].forEach((input) => {
+        input.readOnly = locked;
+      });
+      estadoSelect.disabled = locked;
+    }
+
+    function fillFormFromProfile() {
+      if (!profileData) return;
+      nombreInput.value = profileData.name || "";
+      apellidoPInput.value = profileData.apellido_paterno || "";
+      apellidoMInput.value = profileData.apellido_materno || "";
+      emailInput.value = profileData.email || "";
+      telefonoInput.value = profileData.telefono || "";
+      estadoSelect.value = profileData.ciudad || "";
+      cpInput.value = profileData.codigo_postal || "";
+      const hasAll = Boolean(
+        (profileData.apellido_paterno || "").trim() &&
+        (profileData.apellido_materno || "").trim() &&
+        (profileData.telefono || "").trim() &&
+        (profileData.ciudad || "").trim() &&
+        (profileData.codigo_postal || "").trim()
+      );
+      setFormLock(hasAll);
+      if (hasAll) {
+        statusMsg.textContent = "Datos del usuario cargados automáticamente.";
+        statusMsg.style.color = "#008000";
+      } else {
+        statusMsg.textContent = "Completa tus datos para finalizar el pedido.";
+        statusMsg.style.color = "#b8860b";
+      }
+    }
+
+    async function cargarPerfil() {
+      try {
+        const res = await fetch(`${window.API_BASE}/profile`, {
+          credentials: "include"
+        });
+        if (res.ok) {
+          profileData = await res.json();
+          fillFormFromProfile();
+        } else if (res.status === 401) {
+          statusMsg.textContent = "Inicia sesión para guardar tu pedido automáticamente.";
+          statusMsg.style.color = "#b22222";
+          setFormLock(false);
+        }
+      } catch (error) {
+        console.error("Error obteniendo perfil", error);
+      }
+    }
+
+    cargarPerfil();
+
+    backBtn.addEventListener("click", () => {
+      const confirma = confirm("Si retrocedes se perderán los cambios del pedido actual. ¿Deseas continuar?");
+      if (confirma) {
+        window.location.href = "disenos.html";
+      }
+    });
+
+    function showPostOrderDialog() {
+      secondsLeft = 5;
+      const mensaje = "¿Deseas realizar otro pedido o cerrar sesión?";
+      const dialog = document.createElement("div");
+      dialog.style.position = "fixed";
+      dialog.style.top = "50%";
+      dialog.style.left = "50%";
+      dialog.style.transform = "translate(-50%, -50%)";
+      dialog.style.backgroundColor = "#fff";
+      dialog.style.padding = "20px";
+      dialog.style.borderRadius = "12px";
+      dialog.style.boxShadow = "0 8px 20px rgba(0,0,0,0.2)";
+      dialog.style.maxWidth = "320px";
+      dialog.style.textAlign = "center";
+      dialog.style.zIndex = "9999";
+
+      const text = document.createElement("p");
+      text.textContent = mensaje;
+      const timer = document.createElement("p");
+      timer.style.fontWeight = "bold";
+      timer.style.marginTop = "10px";
+      timer.textContent = `Cerrando en ${secondsLeft} s`;
+
+      const buttonsContainer = document.createElement("div");
+      buttonsContainer.style.display = "flex";
+      buttonsContainer.style.gap = "10px";
+      buttonsContainer.style.marginTop = "15px";
+
+      const otroBtn = document.createElement("button");
+      otroBtn.textContent = "Otro pedido";
+      otroBtn.style.flex = "1";
+      otroBtn.style.padding = "10px";
+      otroBtn.style.backgroundColor = "#eb5d9d";
+      otroBtn.style.color = "#000";
+      otroBtn.style.border = "none";
+      otroBtn.style.borderRadius = "8px";
+      otroBtn.style.cursor = "pointer";
+
+      const salirBtn = document.createElement("button");
+      salirBtn.textContent = "Cerrar sesión";
+      salirBtn.style.flex = "1";
+      salirBtn.style.padding = "10px";
+      salirBtn.style.backgroundColor = "#fdeaf2";
+      salirBtn.style.color = "#000";
+      salirBtn.style.border = "1px solid #f3aacb";
+      salirBtn.style.borderRadius = "8px";
+      salirBtn.style.cursor = "pointer";
+
+      buttonsContainer.appendChild(otroBtn);
+      buttonsContainer.appendChild(salirBtn);
+      dialog.appendChild(text);
+      dialog.appendChild(timer);
+      dialog.appendChild(buttonsContainer);
+      document.body.appendChild(dialog);
+
+      function closeDialog() {
+        clearInterval(countdownTimer);
+        dialog.remove();
+      }
+
+      function logoutAndRedirect() {
+        fetch(`${window.API_BASE}/logout`, {
+          method: "POST",
+          credentials: "include"
+        }).catch((error) => {
+          console.error("Error al cerrar sesión", error);
+        }).finally(() => {
+          window.location.href = "index.html";
+        });
+      }
+
+      otroBtn.addEventListener("click", () => {
+        closeDialog();
+        if (!profileData) {
+          formulario.reset();
+        }
+        window.location.href = "disenos.html";
+      });
+
+      salirBtn.addEventListener("click", () => {
+        closeDialog();
+        logoutAndRedirect();
+      });
+
+      countdownTimer = setInterval(() => {
+        secondsLeft -= 1;
+        if (secondsLeft <= 0) {
+          clearInterval(countdownTimer);
+          dialog.remove();
+          logoutAndRedirect();
+        } else {
+          timer.textContent = `Cerrando en ${secondsLeft} s`;
+        }
+      }, 1000);
+    }
+
+    async function notifyOrderViaFormSubmit(order) {
+      if (!FORM_SUBMIT_ENDPOINT) return;
+      const fullName = `${order.nombre || ''} ${order.apellidoPaterno || ''} ${order.apellidoMaterno || ''}`
+        .replace(/\s+/g, ' ')
+        .trim() || 'Cliente sin nombre';
+      const payload = {
+        nombre: fullName,
+        correo_cliente: order.email || 'sin-correo@little-nails.dev',
+        telefono: order.telefono || 'No proporcionado',
+        ciudad: order.estado || 'No proporcionado',
+        codigo_postal: order.codigoPostal || 'No proporcionado',
+        resumen_pedido: order.resumenPedido || 'Sin resumen',
+        _subject: `Nuevo pedido rápido - ${fullName}`,
+        _template: 'table',
+        _captcha: 'false'
+      };
+      if (FORM_SUBMIT_CC.length) {
+        payload._cc = FORM_SUBMIT_CC.join(',');
+      }
+      if (order.email) {
+        payload._replyto = order.email;
+      }
+
+      try {
+        const response = await fetch(FORM_SUBMIT_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || data.success === 'false') {
+          console.error('FormSubmit rechazó el pedido:', data);
+        } else {
+          console.log('FormSubmit envió el pedido correctamente:', data);
+        }
+      } catch (error) {
+        console.error('No se pudo notificar mediante FormSubmit:', error);
+      }
+    }
+
+    formulario.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const datos = {
+        nombre: profileData ? (profileData.name || "") : nombreInput.value,
+        apellidoPaterno: profileData ? (profileData.apellido_paterno || "") : apellidoPInput.value,
+        apellidoMaterno: profileData ? (profileData.apellido_materno || "") : apellidoMInput.value,
+        email: profileData ? (profileData.email || "") : emailInput.value,
+        telefono: profileData ? (profileData.telefono || "") : telefonoInput.value,
+        estado: profileData ? (profileData.ciudad || "") : estadoSelect.value,
+        codigoPostal: profileData ? (profileData.codigo_postal || "") : cpInput.value,
+        resumenPedido: resumenOculto.value
+      };
+
+      statusMsg.textContent = "Enviando...";
+      statusMsg.style.color = "#000";
+
+      try {
+        const res = await fetch(`${window.API_BASE}/guardar-usuario`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(datos)
+        });
+
+        if (res.ok) {
+          statusMsg.textContent = "¡Pedido guardado correctamente!";
+          statusMsg.style.color = "#008000";
+          notifyOrderViaFormSubmit(datos);
+          if (!profileData) {
+            event.target.reset();
+          }
+          showPostOrderDialog();
+        } else {
+          const data = await res.json().catch(() => ({}));
+          statusMsg.textContent = data.error || (data.errors ? data.errors.join(", ") : "No se pudo guardar el pedido.");
+          statusMsg.style.color = "#b22222";
+        }
+      } catch (err) {
+        console.error("Error de conexión:", err);
+        statusMsg.textContent = "Error de conexión con el servidor.";
+        statusMsg.style.color = "#b22222";
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+

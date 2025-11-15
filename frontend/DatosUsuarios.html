@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Listado de Usuarios</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 30px;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #eb9ac0, #f3aacb);
+      color: #000;
+    }
+
+    h1 {
+      text-align: center;
+      color: black;
+      margin-bottom: 40px;
+    }
+
+    table {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      border-collapse: collapse;
+      background-color: #fbd5e5;
+      box-shadow: 0 4px 12px rgba(243, 170, 203, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #f3aacb;
+    }
+
+    th {
+      background-color: #c97aa7;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    tr:hover {
+      background-color: #fdeaf2;
+    }
+
+    .volver {
+      display: block;
+      text-align: center;
+      margin-top: 40px;
+      font-weight: bold;
+      color: black;
+      text-decoration: underline;
+    }
+
+    .center { text-align: center; }
+
+    /* Botones */
+    button {
+      background-color: #c97aa7;
+      color: #fff;
+      border: none;
+      padding: 6px 10px;
+      margin: 2px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover { background-color: #b96595; }
+    .btn-sec { background-color: #eb9ac0; color: #000; }
+    .btn-sec:hover { background-color: #f3aacb; }
+
+    /* Modal */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000; }
+    .modal .content {
+      background: #fff;
+      max-width: 640px;
+      margin: 60px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .modal h2 { margin-top: 0; color: #c71585; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px 12px;
+      align-items: center;
+    }
+    .total { margin-top: 10px; font-weight: bold; }
+    .row-note { color: #555; font-size: 12px; grid-column: 1 / -1; }
+    .right { text-align: right; }
+  </style>
+</head>
+<body>
+  <h1>Listado de Usuarios</h1>
+  <p class="center"><a href="admin-comentarios.html">Ir a comentarios de clientes</a></p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido Paterno</th>
+        <th>Apellido Materno</th>
+        <th>Correo electronico</th>
+        <th>Teléfono</th>
+        <th>Estado</th>
+        <th>Código Postal</th>
+        <th>Estado del pedido</th>
+        <th>Resumen del Pedido</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="tablaUsuarios">
+      <!-- Los datos se insertan dinámicamente aquí -->
+    </tbody>
+  </table>
+
+  <a class="volver" href="index.html">← Volver al login</a>
+
+  <script src="js/config.js"></script>
+  <!-- Modal para editar pedido -->
+  <div id="pedidoModal" class="modal" aria-hidden="true">
+    <div class="content">
+      <h2>Editar pedido</h2>
+      <div id="pedidoGrid" class="grid"></div>
+      <div id="pedidoTotal" class="total">Total: $0 MXN</div>
+      <p class="row-note">Ajusta las cantidades (0-10). Deja en 0 para quitar un diseño.</p>
+      <div class="right">
+        <button id="pedidoCancel" class="btn-sec" type="button">Cancelar</button>
+        <button id="pedidoSave" type="button">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  async function ensureAdminSession() {
+    try {
+      const res = await fetch(`${window.API_BASE}/me`, { credentials: 'include' });
+      if (!res.ok) return false;
+      const data = await res.json().catch(() => ({}));
+      return !!(data.user && data.user.role === 'admin');
+    } catch (e) {
+      console.error('Error comprobando sesión admin', e);
+      return false;
+    }
+  }
+
+  const COLUMNS = ['nombre','apellido_paterno','apellido_materno','email','telefono','estado','codigo_postal','estado_pedido','resumen_pedido'];
+  const ESTADOS = ['Mexicali','Tijuana','Ensenada','Tecate','Rosarito','SanFelipe'];
+  const ESTADOS_PEDIDO = ['Pendiente por realizar','Realizado'];
+    const DISENOS = [
+      'Francesa Clásica','Rosa Sencillo','Rojo Clásico','Glitter Básico',
+      'Nude Elegante','Blanco Minimalista','Azul Pastel','Neutro Moderno'
+    ];
+    const PRECIOS = [250,200,300,350,400,220,280,320];
+
+    function renderRow(usuario){
+      const tr = document.createElement('tr');
+      tr.dataset.id = usuario.id;
+      tr.innerHTML = `
+        <td>${usuario.nombre ?? ''}</td>
+        <td>${usuario.apellido_paterno ?? ''}</td>
+        <td>${usuario.apellido_materno ?? ''}</td>
+        <td>${usuario.email ?? ''}</td>
+        <td>${usuario.telefono ?? ''}</td>
+  <td>${usuario.estado ?? ''}</td>
+  <td>${usuario.codigo_postal ?? ''}</td>
+  <td>${usuario.estado_pedido ?? ''}</td>
+        <td>${(usuario.resumen_pedido || '').replace(/\n/g,'<br>')}</td>
+        <td class="acciones"></td>
+      `;
+      const actions = tr.querySelector('.acciones');
+      const btnEdit = document.createElement('button'); btnEdit.textContent = 'Editar';
+      const btnSave = document.createElement('button'); btnSave.textContent = 'Guardar'; btnSave.style.display = 'none';
+      const btnCancel = document.createElement('button'); btnCancel.textContent = 'Cancelar'; btnCancel.style.display = 'none';
+      const btnDelete = document.createElement('button'); btnDelete.textContent = 'Eliminar';
+      btnEdit.onclick = () => makeEditable(tr, {btnEdit, btnSave, btnCancel});
+      btnSave.onclick = () => saveChanges(tr, {btnEdit, btnSave, btnCancel});
+      btnCancel.onclick = () => cancelEdit(tr, {btnEdit, btnSave, btnCancel});
+      btnDelete.onclick = () => deleteRow(tr);
+      actions.append(btnEdit, btnSave, btnCancel, btnDelete);
+      return tr;
+    }
+
+    function makeEditable(tr, {btnEdit, btnSave, btnCancel}){
+      tr.dataset.original = JSON.stringify(getRowValues(tr));
+      const tds = tr.querySelectorAll('td');
+      // For each column convert to input/textarea
+      COLUMNS.forEach((field, idx) => {
+        const td = tds[idx];
+        const value = field === 'resumen_pedido' ? td.innerHTML.replace(/<br>/g,'\n') : td.textContent;
+        if(field === 'resumen_pedido'){
+          const wrap = document.createElement('div');
+          const ta = document.createElement('textarea'); ta.value = value; ta.rows = 3; ta.style.width = '100%'; ta.dataset.role = 'resumen';
+          const btnSel = document.createElement('button'); btnSel.type = 'button'; btnSel.textContent = 'Editar pedido'; btnSel.className = 'btn-sec';
+          btnSel.onclick = () => openPedidoModal(ta);
+          wrap.appendChild(ta); wrap.appendChild(btnSel);
+          td.innerHTML = ''; td.appendChild(wrap);
+        } else if(field === 'estado'){
+          const sel = document.createElement('select'); sel.style.width = '100%';
+          ESTADOS.forEach(e => { const opt = document.createElement('option'); opt.value = e; opt.textContent = e; sel.appendChild(opt); });
+          sel.value = value || '';
+          td.innerHTML = ''; td.appendChild(sel);
+        } else if(field === 'estado_pedido'){
+          const selEstado = document.createElement('select'); selEstado.style.width = '100%';
+          ESTADOS_PEDIDO.forEach(e => { const opt = document.createElement('option'); opt.value = e; opt.textContent = e; selEstado.appendChild(opt); });
+          selEstado.value = value || ESTADOS_PEDIDO[0];
+          td.innerHTML = ''; td.appendChild(selEstado);
+        } else {
+          const inp = document.createElement('input'); inp.type = field === 'email' ? 'email' : 'text'; inp.value = value;
+          inp.style.width = '100%'; td.innerHTML = ''; td.appendChild(inp);
+        }
+      });
+      btnEdit.style.display = 'none';
+      btnSave.style.display = '';
+      btnCancel.style.display = '';
+    }
+
+    function cancelEdit(tr, {btnEdit, btnSave, btnCancel}){
+      const original = JSON.parse(tr.dataset.original || '{}');
+      setRowValues(tr, original);
+      btnEdit.style.display = '';
+      btnSave.style.display = 'none';
+      btnCancel.style.display = 'none';
+    }
+
+    function getRowValues(tr){
+      const values = {};
+      const tds = tr.querySelectorAll('td');
+      COLUMNS.forEach((field, idx) => {
+        const td = tds[idx];
+        const input = td.querySelector('input, textarea, select');
+        if(input){
+          values[field] = (input.value || '').trim();
+        } else {
+          values[field] = field === 'resumen_pedido' ? td.innerHTML.replace(/<br>/g,'\n') : (td.textContent || '').trim();
+        }
+      });
+      return values;
+    }
+
+    function setRowValues(tr, values){
+      const tds = tr.querySelectorAll('td');
+      COLUMNS.forEach((field, idx) => {
+        const td = tds[idx];
+        if(field === 'resumen_pedido'){
+          td.innerHTML = (values[field] || '').replace(/\n/g,'<br>');
+        } else {
+          td.textContent = values[field] ?? '';
+        }
+      });
+    }
+
+    // --- Modal lógica ---
+    let modalState = null; // { textarea, cantidades: number[] }
+    function openPedidoModal(targetTextarea){
+      const modal = document.getElementById('pedidoModal');
+      const grid = document.getElementById('pedidoGrid');
+      const totalEl = document.getElementById('pedidoTotal');
+      const currSummary = targetTextarea.value || '';
+      const cantidades = parseSummaryToQuantities(currSummary);
+      modalState = { textarea: targetTextarea, cantidades };
+      grid.innerHTML = '';
+      DISENOS.forEach((nombre, i) => {
+        const label = document.createElement('div'); label.textContent = `${nombre} ($${PRECIOS[i]} MXN)`;
+        const qty = document.createElement('input'); qty.type = 'number'; qty.min = 0; qty.max = 10; qty.value = cantidades[i]; qty.dataset.idx = i; qty.style.width = '80px';
+        qty.addEventListener('input', () => { modalState.cantidades[Number(qty.dataset.idx)] = Number(qty.value || 0); updatePedidoTotal(totalEl); });
+        grid.appendChild(label); grid.appendChild(qty);
+      });
+      updatePedidoTotal(totalEl);
+      modal.style.display = 'block'; modal.setAttribute('aria-hidden','false');
+    }
+
+    function updatePedidoTotal(totalEl){
+      const cantidades = modalState?.cantidades || Array(DISENOS.length).fill(0);
+      let total = 0; cantidades.forEach((c,i)=> total += c * PRECIOS[i]);
+      totalEl.textContent = `Total: $${total} MXN`;
+    }
+
+    function closePedidoModal(){
+      const modal = document.getElementById('pedidoModal');
+      modal.style.display = 'none'; modal.setAttribute('aria-hidden','true');
+    }
+
+    document.getElementById('pedidoCancel').onclick = closePedidoModal;
+    document.getElementById('pedidoSave').onclick = () => {
+      if(!modalState) return closePedidoModal();
+      const summary = buildSummaryFromQuantities(modalState.cantidades);
+      modalState.textarea.value = summary;
+      closePedidoModal();
+    };
+
+    function parseSummaryToQuantities(summary){
+      const cantidades = Array(DISENOS.length).fill(0);
+      const lines = summary.split(/\n+/).map(s=>s.trim()).filter(Boolean);
+      lines.forEach(line => {
+        DISENOS.forEach((nombre,i)=>{
+          if(line.toLowerCase().startsWith(nombre.toLowerCase())){
+            const m = line.match(/×\s*(\d+)/);
+            if(m) cantidades[i] = Number(m[1]);
+          }
+        });
+      });
+      return cantidades;
+    }
+
+    function buildSummaryFromQuantities(cantidades){
+      let out = '';
+      let total = 0;
+      cantidades.forEach((c,i)=>{
+        if(c>0){
+          out += `${DISENOS[i]} × ${c} = $${c*PRECIOS[i]} MXN\n`;
+          total += c*PRECIOS[i];
+        }
+      });
+      if(total === 0) return 'No se ha seleccionado ningún diseño.';
+      out += `Total: $${total} MXN`;
+      return out;
+    }
+
+    function validateInputs(tr){
+      // Limpia estilos previos
+      tr.querySelectorAll('input, textarea').forEach(el => el.style.border = '');
+      const tds = tr.querySelectorAll('td');
+  const getEl = (field) => tds[COLUMNS.indexOf(field)].querySelector('input, textarea, select');
+      const nombreEl = getEl('nombre');
+      const emailEl = getEl('email');
+      const telEl = getEl('telefono');
+      const cpEl = getEl('codigo_postal');
+      const errors = [];
+      let focusEl = null;
+      const setErr = (el, msg) => { if(!focusEl) focusEl = el; el && (el.style.border = '2px solid #e00'); errors.push(msg); };
+      // Nombre requerido
+      if (nombreEl && nombreEl.value.trim().length === 0) setErr(nombreEl, 'El nombre es obligatorio');
+      // Email válido
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (emailEl && !emailRegex.test(emailEl.value.trim())) setErr(emailEl, 'Correo electrónico inválido');
+      // Teléfono 10 dígitos (opcional)
+      const tel = (telEl?.value || '').trim();
+      if (tel && (!/^\d{10}$/.test(tel))) setErr(telEl, 'El teléfono debe tener 10 dígitos');
+      // Código postal 5 dígitos (opcional)
+      const cp = (cpEl?.value || '').trim();
+      if (cp && (!/^\d{5}$/.test(cp))) setErr(cpEl, 'El código postal debe tener 5 dígitos');
+      const estadoPedidoEl = getEl('estado_pedido');
+      if (estadoPedidoEl) {
+        const val = estadoPedidoEl.value.trim();
+        if (!ESTADOS_PEDIDO.includes(val)) setErr(estadoPedidoEl, 'Selecciona un estado de pedido válido');
+      }
+      return { ok: errors.length === 0, errors, focusEl };
+    }
+
+    async function saveChanges(tr, {btnEdit, btnSave, btnCancel}){
+      // Validación previa
+      const validation = validateInputs(tr);
+      if(!validation.ok){
+        alert(validation.errors.join('\n'));
+        validation.focusEl && validation.focusEl.focus();
+        return;
+      }
+      const changes = getRowValues(tr);
+      if(!confirm('¿Confirmar guardar cambios?')) return;
+      try{
+        const id = tr.dataset.id;
+        const resp = await fetch(`${window.API_BASE}/usuarios/${id}`, {
+          method: 'PUT',
+          headers: {'Content-Type':'application/json'},
+          credentials: 'include',
+          body: JSON.stringify(changes)
+        });
+        if(resp.status === 400){
+          const payload = await resp.json().catch(()=>({errors:['Datos inválidos']}));
+          alert((payload.errors || ['Datos inválidos']).join('\n'));
+          return;
+        }
+        if(!resp.ok) throw new Error('No se pudo actualizar');
+        const updated = await resp.json();
+        setRowValues(tr, updated);
+        btnEdit.style.display = '';
+        btnSave.style.display = 'none';
+        btnCancel.style.display = 'none';
+      }catch(e){
+        alert('Error al guardar cambios');
+        console.error(e);
+      }
+    }
+
+    async function deleteRow(tr){
+      if(!confirm('¿Seguro que deseas eliminar este pedido?')) return;
+      try{
+        const id = tr.dataset.id;
+        const resp = await fetch(`${window.API_BASE}/usuarios/${id}`, { method: 'DELETE', credentials: 'include' });
+        if(!resp.ok && resp.status !== 204) throw new Error('No se pudo eliminar');
+        tr.remove();
+      }catch(e){
+        alert('Error al eliminar');
+        console.error(e);
+      }
+    }
+
+    async function cargarListado() {
+      const autorizado = await ensureAdminSession();
+      if (!autorizado) {
+        alert('Debes iniciar sesión con una cuenta de administrador.');
+        window.location.href = 'Usuarios.html';
+        return;
+      }
+
+      try {
+        const response = await fetch(`${window.API_BASE}/usuarios`, { credentials: 'include' });
+        if (!response.ok) throw new Error('No autorizado');
+        const data = await response.json();
+        const tabla = document.getElementById('tablaUsuarios');
+        if(!Array.isArray(data)) throw new Error('Respuesta inválida');
+        data.forEach(usuario => tabla.appendChild(renderRow(usuario)));
+      } catch (error) {
+        console.error('Error al cargar usuarios:', error);
+        const tabla = document.getElementById('tablaUsuarios');
+        tabla.innerHTML = `<tr><td colspan="10">No se pudo cargar la información.</td></tr>`;
+      }
+    }
+
+    cargarListado();
+  </script>
+</body>
+</html>
+
+

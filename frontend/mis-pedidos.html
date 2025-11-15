@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis pedidos</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 30px;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #eb9ac0, #f3aacb);
+      color: #000;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      background-color: #fbd5e5;
+      border-radius: 20px;
+      box-shadow: 0 12px 28px rgba(243, 170, 203, 0.35);
+      padding: 35px 45px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #c97aa7;
+      margin-bottom: 10px;
+    }
+
+    .intro {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .status {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: #ffe4f1;
+      border: 2px solid #f3aacb;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #c71585;
+      font-size: 20px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .badge.pendiente { background-color: #fff7c2; color: #a67c00; }
+    .badge.realizado { background-color: #d4f8d4; color: #1f7a34; }
+
+    .card p {
+      margin: 6px 0;
+      line-height: 1.4;
+    }
+
+    .card pre {
+      background: rgba(255,255,255,0.8);
+      padding: 10px;
+      border-radius: 10px;
+      font-family: 'Segoe UI', sans-serif;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin-top: 10px;
+    }
+
+    .actions {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .btn {
+      background-color: #c71585;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 0 8px;
+      transition: background 0.2s ease;
+    }
+
+    .btn.secondary {
+      background-color: #fdeaf2;
+      color: #c71585;
+      border: 1px solid #f3aacb;
+    }
+
+    .btn.secondary:hover { background-color: #fbe1ef; }
+
+    .btn:hover { background-color: #a0527d; }
+
+    .empty {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Mis pedidos</h1>
+    <p class="intro">Revisa el estatus de tus pedidos realizados en Little Nails Luxury.</p>
+    <div id="status" class="status"></div>
+    <div id="cards" class="cards"></div>
+    <p id="empty" class="empty" hidden>No hemos encontrado pedidos registrados con tu cuenta.</p>
+    <div class="actions">
+  <button class="btn secondary" type="button" id="btnBack">Atrás</button>
+  <button class="btn" type="button" onclick="window.location.href='Formulario.html'">Crear nuevo pedido</button>
+  <button class="btn" type="button" onclick="window.location.href='disenos.html'">Volver a diseños</button>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script>
+    const statusEl = document.getElementById('status');
+    const cardsEl = document.getElementById('cards');
+    const emptyEl = document.getElementById('empty');
+
+    function badgeClass(text) {
+      if (!text) return 'badge pendiente';
+      return text.toLowerCase().includes('realizado') ? 'badge realizado' : 'badge pendiente';
+    }
+
+    function formatDate(isoString) {
+      if (!isoString) return 'Fecha no disponible';
+      const date = new Date(isoString);
+      return date.toLocaleString('es-MX', { dateStyle: 'medium', timeStyle: 'short' });
+    }
+
+    async function cargarPedidos() {
+      statusEl.textContent = 'Cargando pedidos...';
+      try {
+        const res = await fetch(`${window.API_BASE}/mis-pedidos`, {
+          credentials: 'include'
+        });
+        if (res.status === 401) {
+          statusEl.textContent = 'Inicia sesión para ver tus pedidos.';
+          emptyEl.hidden = true;
+          cardsEl.innerHTML = '';
+          return;
+        }
+        if (!res.ok) throw new Error('Respuesta no válida');
+        const pedidos = await res.json();
+        statusEl.textContent = pedidos.length ? `Encontramos ${pedidos.length} pedido(s).` : '';
+        cardsEl.innerHTML = '';
+        if (!pedidos.length) {
+          emptyEl.hidden = false;
+          return;
+        }
+        emptyEl.hidden = true;
+        pedidos.forEach((pedido, idx) => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <h2>Pedido #${pedido.id}</h2>
+            <span class="${badgeClass(pedido.estado_pedido)}">${pedido.estado_pedido || 'Pendiente por realizar'}</span>
+            <p><strong>Fecha:</strong> ${formatDate(pedido.created_at)}</p>
+            <p><strong>Nombre:</strong> ${pedido.nombre || ''} ${pedido.apellido_paterno || ''} ${pedido.apellido_materno || ''}</p>
+            <p><strong>Ciudad:</strong> ${pedido.estado || 'Sin especificar'}</p>
+            <p><strong>Código postal:</strong> ${pedido.codigo_postal || 'N/A'}</p>
+            <pre>${pedido.resumen_pedido || 'Sin resumen registrado.'}</pre>
+          `;
+          cardsEl.appendChild(card);
+        });
+      } catch (error) {
+        console.error('Error cargando pedidos del usuario', error);
+        statusEl.textContent = 'No se pudieron cargar tus pedidos. Intenta nuevamente más tarde.';
+        emptyEl.hidden = true;
+      }
+    }
+
+    cargarPedidos();
+
+    const backBtn = document.getElementById('btnBack');
+    backBtn.addEventListener('click', () => {
+      if (window.history.length > 1) {
+        history.back();
+      } else {
+        window.location.href = 'disenos.html';
+      }
+    });
+  </script>
+</body>
+</html>
