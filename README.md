@@ -8,7 +8,7 @@ El sistema permite la gestión de diseños de uñas personalizadas, usuarios y p
 ## 👩‍💻 Integrantes del equipo
 - Andrea – Product Owner
 - Jazmín – Scrum Master
-- Juan – Dev Team
+- Jose manuel vallejo Garcia – Dev Team
 - [Agrega más integrantes aquí]
 
 ---
